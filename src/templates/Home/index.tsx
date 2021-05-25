@@ -50,7 +50,7 @@ const Home = ({
     </Container>
 
     <Container>
-      <Heading lineLeft lineColor="secondary">
+      <Heading lineLeft lineColor="secondary" color="white">
         Most Popular
       </Heading>
 
@@ -58,7 +58,7 @@ const Home = ({
     </Container>
 
     <Container>
-      <Heading lineLeft lineColor="secondary">
+      <Heading lineLeft lineColor="secondary" color="white">
         Upcomming
       </Heading>
 
@@ -68,7 +68,7 @@ const Home = ({
     </Container>
 
     <Container>
-      <Heading lineLeft lineColor="secondary">
+      <Heading lineLeft lineColor="secondary" color="white">
         Free Games
       </Heading>
 
