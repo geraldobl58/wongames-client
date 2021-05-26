@@ -134,7 +134,7 @@ export const MenuFull = styled.nav<MenuFullProps>`
     }
   `}
 `
-export const RegisterBox = styled.a`
+export const RegisterBox = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
