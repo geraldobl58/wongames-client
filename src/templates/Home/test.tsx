@@ -52,6 +52,6 @@ describe('<Home />', () => {
     // card game ( 5 sections com 4 cards cada = 5x4 = 20)
     expect(screen.getAllByText(/population zero/i)).toHaveLength(20)
     // highlight
-    expect(screen.getAllByText(/read dead is back!/i)).toHaveLength(3)
+    expect(screen.getAllByText(/read dead/i)).toHaveLength(2)
   })
 })
