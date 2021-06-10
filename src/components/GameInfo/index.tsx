@@ -3,9 +3,9 @@ import {
   FavoriteBorder
 } from '@styled-icons/material-outlined'
 
-import Button from 'components/Button'
-import Heading from 'components/Heading'
-import Ribbon from 'components/Ribbon'
+import Button from '../Button'
+import Heading from '../Heading'
+import Ribbon from '../Ribbon'
 
 import * as S from './styles'
 
