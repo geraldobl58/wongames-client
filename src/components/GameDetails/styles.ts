@@ -40,7 +40,7 @@ export const Description = styled.p`
   `}
 `
 
-export const IconWrapper = styled.div`
+export const IconsWrapper = styled.div`
   ${({ theme }) => css`
     color: ${theme.colors.white};
   `}
