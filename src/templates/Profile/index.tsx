@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router'
+
 import Base from 'templates/Base'
 import { Container } from 'components/Container'
 import Heading from 'components/Heading'
@@ -9,19 +11,23 @@ export type profileTemplateProps = {
   children: React.ReactNode
 }
 
-const Profile = ({ children }: profileTemplateProps) => (
-  <Base>
-    <Container>
-      <Heading lineLeft lineColor="secondary" color="white">
-        My profile
-      </Heading>
+const Profile = ({ children }: profileTemplateProps) => {
+  const { asPath } = useRouter()
 
-      <S.Main>
-        <ProfileMenu />
-        <S.Content>{children}</S.Content>
-      </S.Main>
-    </Container>
-  </Base>
-)
+  return (
+    <Base>
+      <Container>
+        <Heading lineLeft lineColor="secondary" color="white">
+          My profile
+        </Heading>
+
+        <S.Main>
+          <ProfileMenu activeLink={asPath} />
+          <S.Content>{children}</S.Content>
+        </S.Main>
+      </Container>
+    </Base>
+  )
+}
 
 export default Profile
