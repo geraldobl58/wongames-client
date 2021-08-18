@@ -6,7 +6,11 @@ import Head from 'next/head'
 import GlobalStyles from 'styles/global'
 import theme from 'styles/theme'
 
+import { useApollo } from 'utils/apollo'
+
 function App({ Component, pageProps }: AppProps) {
+  const client = useApollo(pageProps.initialApoloState)
+
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
