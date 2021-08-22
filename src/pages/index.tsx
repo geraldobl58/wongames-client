@@ -16,8 +16,6 @@ export async function getServerSideProps() {
 
   const { data } = await apolloClient.query<QueryHome>({ query: QUERY_HOME })
 
-  console.log(data.banners)
-
   return {
     props: {
       revalidate: 10,
