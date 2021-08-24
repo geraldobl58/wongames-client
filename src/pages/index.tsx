@@ -1,6 +1,5 @@
 import Home, { HomeTemplateProps } from '../templates/Home'
 
-import gamesMock from '../components/GameCardSlider/mock'
 import highlightMock from '../components/Highlight/mock'
 import { initializeApollo } from 'utils/apollo'
 import { QueryHome } from 'graphql/generated/QueryHome'
@@ -33,6 +32,7 @@ export async function getServerSideProps() {
         })
       })),
 
+      newGamesTitle: sections?.newGames?.title,
       newGames: newGames.map((game) => ({
         title: game.name,
         slug: game.slug,
@@ -40,6 +40,7 @@ export async function getServerSideProps() {
         img: `http://localhost:1337${game.cover?.url}`,
         price: game.price
       })),
+      mostPopularGamesTitle: sections?.popularGames?.title,
       mostPopularHighlight: highlightMock,
       mostPopularGames: sections!.popularGames!.games.map((game) => ({
         title: game.name,
@@ -48,6 +49,7 @@ export async function getServerSideProps() {
         img: `http://localhost:1337${game.cover?.url}`,
         price: game.price
       })),
+      upcomingGamesTitle: sections?.upcommingGames?.title,
       upcommingGames: upcomingGames.map((game) => ({
         title: game.name,
         slug: game.slug,
@@ -56,6 +58,7 @@ export async function getServerSideProps() {
         price: game.price
       })),
       upcommingHighlight: highlightMock,
+      freeGamesTitle: sections?.freeGames?.title,
       freeGames: freeGames.map((game) => ({
         title: game.name,
         slug: game.slug,
