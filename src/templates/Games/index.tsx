@@ -37,7 +37,7 @@ const GamesTemplate = ({ filterItems }: GamesTemplateProps) => {
         <ExploreSidebar items={filterItems} onFilter={handleFilter} />
 
         {loading ? (
-          <p>Loadig...</p>
+          <p>Loading...</p>
         ) : (
           <section>
             <Grid>
