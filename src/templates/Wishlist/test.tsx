@@ -10,6 +10,7 @@ import highlightMock from 'components/Highlight/mock'
 const props = {
   games: gamesMock,
   recommendedHighlight: highlightMock,
+  recommendedTitle: 'You may like hese games',
   recommendedGames: gamesMock
 }
 
