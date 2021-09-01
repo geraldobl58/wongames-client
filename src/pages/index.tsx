@@ -9,7 +9,7 @@ export default function Index(props: HomeTemplateProps) {
   return <Home {...props} />
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const apolloClient = initializeApollo()
 
   const TODAY = new Date().toISOString().slice(0, 10)
