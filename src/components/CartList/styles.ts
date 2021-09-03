@@ -52,6 +52,11 @@ export const Loading = styled.div`
   `}
 `
 
+export const GameList = styled.div`
+  max-height: 40rem;
+  overflow-y: auto;
+`
+
 export const Footer = styled.div`
   ${({ theme }) => css`
     background: ${tint(0.2, theme.colors.lightGray)};
