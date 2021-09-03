@@ -2,7 +2,7 @@ import {
   AddShoppingCart,
   RemoveShoppingCart
 } from '@styled-icons/material-outlined'
-import { useCart } from 'hooks/use-cart'
+import { useCart } from '../../hooks/use-cart'
 
 import Button from '../Button'
 
