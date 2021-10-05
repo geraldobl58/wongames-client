@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { GameFragment } from 'graphql/fragments/game'
+import { GameFragment } from '../../graphql/fragments/game'
 
 export const MUTATION_CREATE_WISHLIST = gql`
   mutation MutationCreateWishlist($input: createWishlistInput!) {
