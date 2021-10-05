@@ -7,6 +7,7 @@ import { useQueryWishlist } from 'graphql/queries/wishlist'
 import { QueryWishlist_wishlists_games } from 'graphql/generated/QueryWishlist'
 
 import { gamesMapper } from 'utils/mappers'
+import { wishlistItems } from './mock'
 
 export type WishlistContextData = {
   items: GameCardProps[]
@@ -39,10 +40,6 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
 
   const [session] = useSession()
 
-  const isInWishlist = (id: string) => false
-  const addToWishlist = (id: string) => {}
-  const removeFromWishlist = (id: string) => {}
-
   const { data, loading } = useQueryWishlist({
     skip: !session?.user?.email,
     context: { session },
@@ -54,6 +51,12 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
   useEffect(() => {
     setWishlstItems(data?.wishlists[0]?.games || [])
   }, [data])
+
+  const isInWishlist = (id: string) =>
+    !!wishlistItems.find((game) => game.id === id)
+
+  const addToWishlist = (id: string) => {}
+  const removeFromWishlist = (id: string) => {}
 
   return (
     <WishlistContext.Provider

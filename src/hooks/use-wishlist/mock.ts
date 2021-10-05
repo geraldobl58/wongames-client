@@ -12,7 +12,7 @@ const gameMock = (id: string) => ({
   __typename: 'Game'
 })
 
-export const wishListMock = {
+export const wishlistMock = {
   request: {
     query: QUERY_WISHLIST,
     context: { session: { jwt: '123' } },
@@ -22,7 +22,7 @@ export const wishListMock = {
   },
   result: {
     data: {
-      wishlist: [
+      wishlists: [
         {
           id: 1,
           games: [gameMock('1'), gameMock('2')]
@@ -35,7 +35,7 @@ export const wishListMock = {
 export const wishlistItems = [
   {
     id: '1',
-    title: 'Sample Game',
+    title: 'Sample Game 1',
     slug: 'sample-game-1',
     developer: 'sample developer',
     img: 'http://localhost:1337/sample-game.jpg',
