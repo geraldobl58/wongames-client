@@ -12,8 +12,7 @@ export const Wrapper = styled.article`
 `
 
 export const ImageBox = styled.a`
-  min-height: 14rem;
-  position: relative;
+  height: 14rem;
   width: 100%;
   background: #f6f7f8;
   background-image: linear-gradient(
@@ -28,11 +27,15 @@ export const ImageBox = styled.a`
 
   img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
+
   @keyframes placeholderShimmer {
     0% {
       background-position: -40rem 0;
     }
+
     100% {
       background-position: 40rem 0;
     }
@@ -79,6 +82,7 @@ export const FavButton = styled.div`
     right: -1rem;
     top: -0.5rem;
     cursor: pointer;
+
     svg {
       width: 2.5rem;
     }
@@ -93,6 +97,10 @@ export const BuyBox = styled.div`
     margin-top: ${theme.spacings.xxsmall};
   `}
 `
+
+type PriceProps = {
+  isPromotional?: boolean
+}
 
 const priceModifiers = {
   default: (theme: DefaultTheme) => css`
@@ -110,16 +118,13 @@ const priceModifiers = {
   `
 }
 
-type PriceProps = {
-  isPromotional?: boolean
-}
-
 export const Price = styled.div<PriceProps>`
   ${({ theme, isPromotional }) => css`
     display: inline-flex;
     font-weight: ${theme.font.bold};
     height: 3rem;
     align-items: center;
+
     ${!isPromotional && priceModifiers.default(theme)};
     ${isPromotional && priceModifiers.promotional(theme)};
   `}
