@@ -1,11 +1,9 @@
-import { FavoriteBorder } from '@styled-icons/material-outlined'
-
 import formatPrice from '../../utils/format-price'
 
-import Button from '../Button'
 import Heading from '../Heading'
 import Ribbon from '../Ribbon'
 import CartButton from '../CartButton'
+import WishlistButton from '../WishlistButton'
 
 import * as S from './styles'
 
@@ -28,9 +26,7 @@ const GameInfo = ({ id, title, description, price }: GameInfoProps) => (
 
     <S.ButtonsWrapper>
       <CartButton id={id} size="large" hasText />
-      <Button icon={<FavoriteBorder />} size="large" minimal>
-        Wishlist
-      </Button>
+      <WishlistButton id={id} hasText size="large" />
     </S.ButtonsWrapper>
   </S.Wrapper>
 )

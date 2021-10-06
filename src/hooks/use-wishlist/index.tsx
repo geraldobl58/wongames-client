@@ -1,18 +1,20 @@
-import { createContext, useContext, useState, useEffect, useMemo } from 'react'
-import { useSession } from 'next-auth/client'
-import { useMutation } from '@apollo/client'
-
-import { GameCardProps } from '../../components/GameCard'
-
-import { useQueryWishlist } from '../../graphql/queries/wishlist'
-import { QueryWishlist_wishlists_games } from '../../graphql/generated/QueryWishlist'
-
-import { wishlistItems } from './mock'
-import { gamesMapper } from '../../utils/mappers'
+import { useApolloClient, useMutation } from '@apollo/client'
+import { GameCardProps } from 'components/GameCard'
+import { GameFragment } from 'graphql/fragments/game'
+import {
+  QueryWishlist,
+  QueryWishlist_wishlists_games
+} from 'graphql/generated/QueryWishlist'
 import {
   MUTATION_CREATE_WISHLIST,
   MUTATION_UPDATE_WISHLIST
 } from 'graphql/mutations/wishlist'
+import { QUERY_WISHLIST, useQueryWishlist } from 'graphql/queries/wishlist'
+import { useSession } from 'next-auth/client'
+import { useMemo } from 'react'
+import { useState } from 'react'
+import { createContext, useContext, useEffect } from 'react'
+import { gamesMapper } from 'utils/mappers'
 
 export type WishlistContextData = {
   items: GameCardProps[]
@@ -41,16 +43,17 @@ export type WishlistProviderProps = {
 const WishlistProvider = ({ children }: WishlistProviderProps) => {
   const [session] = useSession()
   const [wishlistId, setWishlistId] = useState<string | null>()
-  const [wishlstItems, setWishlstItems] = useState<
+  const [wishlistItems, setWishlistItems] = useState<
     QueryWishlist_wishlists_games[]
   >([])
+  const apolloClient = useApolloClient()
 
   const [createList, { loading: loadingCreate }] = useMutation(
     MUTATION_CREATE_WISHLIST,
     {
       context: { session },
       onCompleted: (data) => {
-        setWishlstItems(data?.createWishlist?.wishlist?.games || [])
+        setWishlistItems(data?.createWishlist?.wishlist?.games || [])
         setWishlistId(data?.createWishlist?.wishlist?.id)
       }
     }
@@ -61,44 +64,112 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
     {
       context: { session },
       onCompleted: (data) => {
-        setWishlstItems(data?.updateWishlist?.wishlist?.games || [])
+        setWishlistItems(data?.updateWishlist?.wishlist?.games || [])
       }
     }
   )
 
-  const { data, loading: loadingQuery } = useQueryWishlist({
+  const options = {
     skip: !session?.user?.email,
     context: { session },
     variables: {
       identifier: session?.user?.email as string
     }
-  })
+  }
+
+  const { data, loading: loadingQuery } = useQueryWishlist(options)
 
   useEffect(() => {
-    setWishlstItems(data?.wishlists[0]?.games || [])
+    setWishlistItems(data?.wishlists[0]?.games || [])
     setWishlistId(data?.wishlists[0]?.id)
   }, [data])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const wishlistIds = useMemo(() => wishlistItems.map((game) => game.id), [
     wishlistItems
   ])
 
   const isInWishlist = (id: string) =>
-    !!wishlistItems.find((game) => game.id === id)
+    wishlistItems.some((game) => game.id === id)
+
+  const optimisticGameResponse = (id: string) => {
+    const game = apolloClient.readFragment({
+      id: `Game:${id}`,
+      fragment: GameFragment
+    })
+
+    return (
+      game ?? {
+        __typename: 'Game',
+        id,
+        name: '',
+        slug: '',
+        cover: {
+          __typename: 'UploadFile',
+          url: ''
+        },
+        developers: [
+          {
+            __typename: 'Developer',
+            name: ''
+          }
+        ],
+        price: ''
+      }
+    )
+  }
 
   const addToWishlist = (id: string) => {
+    // se não existir wishlist - cria
     if (!wishlistId) {
       return createList({
-        variables: { input: { data: { games: [...wishlistIds, id] } } }
+        variables: { input: { data: { games: [...wishlistItems, id] } } },
+        optimisticResponse: {
+          createWishlist: {
+            wishlist: {
+              id: String(Math.round(Math.random() * -1000000)),
+              games: [optimisticGameResponse(id)],
+              __typename: 'Wishlist'
+            },
+            __typename: 'createWishlistPayload'
+          }
+        },
+        update: (cache, payload) => {
+          const newWishlist = payload.data.createWishlist.wishlist
+
+          const existingWishlist = cache.readQuery<QueryWishlist>({
+            query: QUERY_WISHLIST,
+            ...options
+          })
+
+          if (existingWishlist && newWishlist) {
+            cache.writeQuery({
+              query: QUERY_WISHLIST,
+              data: {
+                wishlists: [newWishlist]
+              },
+              ...options
+            })
+          }
+        }
       })
     }
 
+    // senão atualiza a wishlist existente
     return updateList({
       variables: {
         input: {
           where: { id: wishlistId },
           data: { games: [...wishlistIds, id] }
+        }
+      },
+      optimisticResponse: {
+        updateWishlist: {
+          wishlist: {
+            id: wishlistId,
+            games: [...wishlistItems, optimisticGameResponse(id)],
+            __typename: 'Wishlist'
+          },
+          __typename: 'updateWishlistPayload'
         }
       }
     })
@@ -108,12 +179,18 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
     return updateList({
       variables: {
         input: {
-          input: {
-            where: { id: wishlistId },
-            data: {
-              games: wishlistIds.filter((gameId: string) => gameId !== id)
-            }
-          }
+          where: { id: wishlistId },
+          data: { games: wishlistIds.filter((gameId: string) => gameId !== id) }
+        }
+      },
+      optimisticResponse: {
+        updateWishlist: {
+          wishlist: {
+            id: wishlistId,
+            games: wishlistItems.filter(({ id: gameId }) => gameId !== id),
+            __typename: 'Wishlist'
+          },
+          __typename: 'updateWishlistPayload'
         }
       }
     })
@@ -122,7 +199,7 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
   return (
     <WishlistContext.Provider
       value={{
-        items: gamesMapper(wishlstItems),
+        items: gamesMapper(wishlistItems),
         isInWishlist,
         addToWishlist,
         removeFromWishlist,
