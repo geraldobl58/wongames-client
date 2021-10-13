@@ -1,9 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import Cart, { CartProps } from 'templates/Cart'
 
-import itemsMock from 'components/CartList/mock'
-import cardsMock from 'components/PaymentOptions/mock'
-
 import { QueryRecommended } from 'graphql/generated/QueryRecommended'
 import { QUERY_RECOMMENDED } from 'graphql/queries/recommended'
 
@@ -26,9 +23,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       session,
-      items: itemsMock,
-      total: '$ 430,00',
-      cards: cardsMock,
       recommendendTitle: data.recommended?.section?.title,
       recommendedGames: gamesMapper(data.recommended?.section?.games),
       recommendedHighlight: highlightMapper(
