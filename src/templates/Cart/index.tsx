@@ -1,3 +1,4 @@
+import { Session } from 'next-auth/client'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 
@@ -12,7 +13,6 @@ import PaymentForm from 'components/PaymentForm'
 import CartList, { CartListProps } from 'components/CartList'
 
 import * as S from './styles'
-import { Session } from 'next-auth/client'
 
 export type CartProps = {
   session: Session

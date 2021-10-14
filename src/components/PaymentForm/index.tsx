@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Session } from 'next-auth/client'
 
 import Heading from '../Heading'
 import Button from '../Button'
@@ -13,7 +14,6 @@ import { createPaymentIntent } from 'utils/stripe/methods'
 import { ErrorOutline, ShoppingCart } from '@styled-icons/material-outlined'
 
 import * as S from './styles'
-import { Session } from 'next-auth/client'
 
 type PaymentFormProps = {
   session: Session
@@ -33,7 +33,6 @@ const PaymentForm = ({ session }: PaymentFormProps) => {
 
         if (data.freeGames) {
           setFreeGames(true)
-          console.log(data.freeGames)
           return
         }
 
@@ -41,7 +40,6 @@ const PaymentForm = ({ session }: PaymentFormProps) => {
           setError(data.error)
         } else {
           setClientSecret(data.client_secret)
-          console.log(data.client_secret)
         }
       }
     }
@@ -60,13 +58,17 @@ const PaymentForm = ({ session }: PaymentFormProps) => {
           Payment
         </Heading>
 
-        <CardElement
-          options={{
-            hidePostalCode: true,
-            style: { base: { fontSize: '16px' } }
-          }}
-          onChange={handleChange}
-        />
+        {freeGames ? (
+          <S.FreeGames>Only free games, click buy and enjoy!</S.FreeGames>
+        ) : (
+          <CardElement
+            options={{
+              hidePostalCode: true,
+              style: { base: { fontSize: '16px' } }
+            }}
+            onChange={handleChange}
+          />
+        )}
         {error && (
           <S.Error>
             <ErrorOutline size={20} />
@@ -81,7 +83,7 @@ const PaymentForm = ({ session }: PaymentFormProps) => {
         <Button
           fullWidth
           icon={<ShoppingCart />}
-          disabled={disabled || !!error}
+          disabled={!freeGames && (disabled || !!error)}
         >
           Buy now
         </Button>
