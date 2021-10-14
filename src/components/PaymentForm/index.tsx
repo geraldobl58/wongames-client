@@ -11,9 +11,11 @@ import { ErrorOutline, ShoppingCart } from '@styled-icons/material-outlined'
 import * as S from './styles'
 
 const PaymentForm = () => {
+  const [disabled, setDisabled] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const handleChange = async (event: StripeCardElementChangeEvent) => {
+    setDisabled(event.empty)
     setError(event.error ? event.error.message : '')
   }
 
@@ -42,7 +44,11 @@ const PaymentForm = () => {
         <Button as="a" fullWidth minimal>
           Continue shopping
         </Button>
-        <Button fullWidth icon={<ShoppingCart />}>
+        <Button
+          fullWidth
+          icon={<ShoppingCart />}
+          disabled={disabled || !!error}
+        >
           Buy now
         </Button>
       </S.Footer>
