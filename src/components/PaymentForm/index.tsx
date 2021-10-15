@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { Session } from 'next-auth/client'
 
 import Heading from '../Heading'
@@ -22,6 +23,7 @@ type PaymentFormProps = {
 }
 
 const PaymentForm = ({ session }: PaymentFormProps) => {
+  const { push } = useRouter()
   const { items } = useCart()
   const stripe = useStripe()
   const elements = useElements()
@@ -62,6 +64,11 @@ const PaymentForm = ({ session }: PaymentFormProps) => {
     event.preventDefault()
     setLoading(true)
 
+    if (freeGames) {
+      push('/success')
+      return
+    }
+
     const payload = await stripe!.confirmCardPayment(clientSecret, {
       payment_method: {
         card: elements!.getElement(CardElement)!
@@ -75,7 +82,7 @@ const PaymentForm = ({ session }: PaymentFormProps) => {
       setError(null)
       setLoading(false)
 
-      console.log('YEEEEE, TUDO OK COM SUA COMPRA')
+      push('/success')
     }
   }
 
