@@ -1,3 +1,5 @@
+import Analytics from 'components/Analytics'
+
 import Document, {
   Html,
   Head,
@@ -5,6 +7,7 @@ import Document, {
   NextScript,
   DocumentContext
 } from 'next/document'
+import React from 'react'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -41,6 +44,7 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <Analytics />
         </body>
       </Html>
     )
