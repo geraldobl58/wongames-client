@@ -1,6 +1,6 @@
 /// <reference path="../support/index.d.ts" />
 
-describe('Cypress TS', () => {
+describe.skip('Cypress TS', () => {
   it('should go to Google', () => {
     cy.google()
   })
@@ -21,3 +21,4 @@ describe('Cypress TS', () => {
     cy.findByText(/Esse é um site de estudos!/i).should('exist')
   })
 })
+
