@@ -46,3 +46,9 @@ Cypress.Commands.add('shouldRenderBanners', () => {
     cy.findByRole('link', { name: /buy now/i })
   })
 })
+
+Cypress.Commands.add('shouldRenderShowcase', ({ name, highlight = false }) => {
+  cy.get(`[data-cy="${name}"]`).within(() => {
+    cy.findByRole('heading', { name }).should('exist')
+  })
+})
