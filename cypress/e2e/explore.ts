@@ -27,4 +27,22 @@ describe('Explore Page', () => {
     cy.getByDataCy('game-card').should('have.length', 18)
   })
 
+  it('should order by price', () => {
+    cy.findByText(/Lowest to highest/i).click()
+
+    cy.location('href').should('contain', 'sort=price%3Aasc')
+
+    cy.getByDataCy('game-card').first().within(() => {
+      cy.findByText('$0.00').should('exist')
+    })
+
+    cy.findByText(/Highest to lowest/i).click()
+
+    cy.location('href').should('contain', 'sort=price%3Adesc')
+
+    cy.getByDataCy('game-card').first().within(() => {
+      cy.findByText('$0.00').should('not.exist')
+    })
+  })
+
 })
