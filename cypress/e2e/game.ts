@@ -58,5 +58,17 @@ describe('Game Page', () => {
     cy.getByDataCy('cart-list').within(() => {
       cy.findByRole('heading', { name: /biomutant/i }).should('exist')
     })
+
+    cy.findAllByLabelText(/cart items/i)
+      .first()
+      .click()
+
+    cy.getByDataCy('game-info').within(() => {
+      cy.findByRole('button', { name: /remove from cart/i }).click()
+      cy.findByRole('button', { name: /add to cart/i }).should('exist')
+    })
+
+    cy.findAllByLabelText(/cart items/i).should('not.exist')
+
   })
 })
