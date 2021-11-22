@@ -78,7 +78,7 @@ Cypress.Commands.add('shouldBeLessThan', (value) => {
     .invoke('text')
     .then($el => $el.replace('$', ''))
     .then(parseFloat)
-    .should('be.lt', 0)
+    .should('be.lt', value)
 })
 
 Cypress.Commands.add('shouldBeGreaterThan', (value) => {
@@ -86,5 +86,5 @@ Cypress.Commands.add('shouldBeGreaterThan', (value) => {
     .invoke('text')
     .then($el => $el.replace('$', ''))
     .then(parseFloat)
-    .should('be.gt', 0)
+    .should('be.gt', value)
 })
