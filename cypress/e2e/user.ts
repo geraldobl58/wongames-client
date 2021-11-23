@@ -13,7 +13,7 @@ describe('User', () => {
   })
 
   it('should sign in and sign out', () => {
-    cy.wait(10000);
+    cy.wait(10000)
     cy.visit('/sign-in')
     cy.signIn()
 
