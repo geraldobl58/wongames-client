@@ -38,6 +38,18 @@ declare namespace Cypress {
       signIn(email?: string, password?: string): Chainable<Element>
 
      /**
+     * Custom command to sign in
+     * @example cy.addToCartByIndex(2)
+     */
+      addToCartByIndex(index: number): Chainable<Element>
+
+     /**
+     * Custom command to sign in
+     * @example cy.removeFromCartByIndex(3)
+     */
+      removeFromCartByIndex(index: number): Chainable<Element>
+
+     /**
      * Custom command to get element by data-cy values
      * @example cy.getByDataCy('selector')
      */
