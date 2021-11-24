@@ -26,6 +26,7 @@
 
 // Add Testing Library Commands
 import '@testing-library/cypress/add-commands';
+import 'cypress-plugin-stripe-elements'
 
 Cypress.Commands.add('google', () => cy.visit('https://google.com'))
 
